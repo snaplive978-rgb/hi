@@ -1,0 +1,50 @@
+modules = ["nodejs-24", "postgresql-16"]
+
+[deployment]
+router = "application"
+deploymentTarget = "autoscale"
+
+[deployment.postBuild]
+args = ["pnpm", "store", "prune"]
+env = { "CI" = "true" }
+
+[workflows]
+runButton = "Project"
+
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 8081
+externalPort = 80
+
+[[ports]]
+localPort = 8082
+externalPort = 3003
+
+[[ports]]
+localPort = 24045
+externalPort = 3000
+
+[[ports]]
+localPort = 24046
+externalPort = 3002
+
+[userenv]
+
+[userenv.shared]
+ADMIN_EMAIL = "admin@gmail.com"
+JWT_SECRET = "mas_global_jwt_zcira6nrlzbmo8kd7po"
+ADMIN_PASSWORD = "love"
+
+[nix]
+channel = "stable-25_05"
